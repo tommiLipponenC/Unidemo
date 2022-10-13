@@ -54,10 +54,31 @@ namespace Unidemo.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> AddUsersDepartment(string id, Guid departmentId)
         {
-            var user = await _context.Users.FindAsync(id);
-            user.DepartmentId = departmentId;
-            await _context.SaveChangesAsync();
-            return Ok();
+            if (departmentId == Guid.Empty) 
+            {
+                return BadRequest("Please check ID values.");
+            }
+            try
+            {
+                var user = await _context.Users.FindAsync(id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                var department = await _context.Departments.FindAsync(departmentId);
+                if (department == null)
+                {
+                    return NotFound();
+                }
+                user.DepartmentId = departmentId;
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(500, "Internal Server Error, please try again later.");
+            }           
         }
 
         // DELETE: api/Courses/5
@@ -68,7 +89,7 @@ namespace Unidemo.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteUser(string id)
         {
-            if (id == String.Empty)
+            if (id == string.Empty)
             {
                 return BadRequest("Please check the parameter.");
             }
