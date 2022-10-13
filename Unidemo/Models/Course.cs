@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Unidemo.Data;
 
 namespace Unidemo.Models
 {
@@ -11,5 +12,6 @@ namespace Unidemo.Models
         [MinLength(2, ErrorMessage = "Min lenght is 2 characters")]
         public string CourseName { get; set; }
         public int Points { get; set; }
+        public List<ApplicationUser>? AppUsers { get; set; }
     }
 }
