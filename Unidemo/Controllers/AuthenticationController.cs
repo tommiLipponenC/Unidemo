@@ -235,7 +235,7 @@ namespace Unidemo.Controllers
               audience: _tokenProps.Audience,
               issuer: _tokenProps.Issuer,
               claims: userClaims,
-              expires: DateTime.UtcNow.AddMinutes(3),                      // Accesstokenin voimassaoloaika    
+              expires: DateTime.UtcNow.AddMinutes(30),                      // Accesstokenin voimassaoloaika    
               signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
 
             return jwttoken;
