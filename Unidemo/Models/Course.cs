@@ -12,6 +12,7 @@ namespace Unidemo.Models
         [MinLength(2, ErrorMessage = "Min lenght is 2 characters")]
         public string CourseName { get; set; }
         public int Points { get; set; }
-        public List<ApplicationUser>? AppUsers { get; set; }
+        public ICollection<ApplicationUser>? AppUsers { get; set; }
+        public List<StudentCourse>? StudentCourses { get; set; }
     }
 }

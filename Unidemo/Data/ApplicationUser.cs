@@ -21,7 +21,7 @@ namespace Unidemo.Data
         public DateTime? RefreshTokenExpiryTime { get; set; }
         public Guid? DepartmentId { get; set; }
         public Department? Department { get; set; }
-        public Guid? CourseId { get; set; }
-        public Course? Course { get; set; }
+        public ICollection<Course>? Courses { get; set; }
+        public List<StudentCourse>? StudentCourses { get; set; }
     }
 }
