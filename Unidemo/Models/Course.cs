@@ -5,6 +5,7 @@ namespace Unidemo.Models
 {
     public class Course
     {
+        [Key]
         public Guid CourseId { get; set; }
 
         [Required]
@@ -14,5 +15,6 @@ namespace Unidemo.Models
         public int Points { get; set; }
         public ICollection<ApplicationUser>? AppUsers { get; set; }
         public List<StudentCourse>? StudentCourses { get; set; }
+        public List<Grade>? Studentsgrades { get; set; }
     }
 }

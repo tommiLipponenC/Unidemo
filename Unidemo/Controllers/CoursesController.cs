@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,8 @@ namespace Unidemo.Controllers
     [ApiController]
     [Produces("application/json")]
     [Consumes("application/json")]
+    [Authorize(Roles = "Student, Admin, SuperAdmin")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public class CoursesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -32,6 +35,7 @@ namespace Unidemo.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetCourses()
         {
             try
@@ -52,6 +56,7 @@ namespace Unidemo.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetCourse(Guid id)
         {
             var course = await _context.Courses.FindAsync(id);
@@ -72,12 +77,14 @@ namespace Unidemo.Controllers
         }
 
         // PUT: api/Courses/5
-        ///<summary>Edit course</summary>
+        ///<summary>Edit course(Required Role = Admin).</summary>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditCourse(Guid id, [FromBody] EditCourseDto editCourseDto)
         {
             if (!ModelState.IsValid || id == Guid.Empty)
@@ -136,11 +143,13 @@ namespace Unidemo.Controllers
         }
 
         // POST: api/Courses
-        ///<summary>Creates a new Course and returns a newly created Course.</summary>
+        ///<summary>Creates a new Course and returns a newly created Course(Required Role = Admin).</summary>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateCourse([FromBody]CreateCourseDto createCourseDto)
         {
             if (!ModelState.IsValid)
@@ -168,11 +177,13 @@ namespace Unidemo.Controllers
         }
 
         // DELETE: api/Courses/5
-        ///<summary>Deletes Course by id</summary>
+        ///<summary>Deletes Course by id(Required Role = Admin)</summary>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCourse(Guid id)
         {
             if (id == Guid.Empty)

@@ -213,9 +213,11 @@ namespace Unidemo.Controllers
         }
 
         // /api/authentication/revoke-all
-        ///<summary>Revokes refresh tokens of all registered users.</summary>
+        ///<summary>Revokes refresh tokens of all registered users(Required Role = SuperAdmin)</summary>
         [HttpPost]
         [Route("revoke-all")]
+        [Authorize(Roles = "SuperAdmin")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> RevokeAll()
         {
             var users = _userManager.Users.ToList();

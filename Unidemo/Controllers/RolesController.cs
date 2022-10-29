@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Diagnostics;
 using System.Xml.Linq;
 using Unidemo.Data;
@@ -14,6 +16,8 @@ namespace Unidemo.Controllers
     [ApiController]
     [Produces("application/json")]
     [Consumes("application/json")]
+    [Authorize(Roles = "SuperAdmin, Admin, Developer")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public class RolesController : ControllerBase
     {
        
@@ -29,7 +33,8 @@ namespace Unidemo.Controllers
 
         // GET: api/Roles
         ///<summary>Retrieves a list of all roles.</summary>
-        [HttpGet]      
+        [HttpGet]
+       
         public async Task<IActionResult> GetRoles()
         {
             var roles = await _roleManager.Roles.ToListAsync();
@@ -39,7 +44,8 @@ namespace Unidemo.Controllers
 
         // GET: api/Roles/name
         ///<summary>Retrieves a specific role by name</summary>
-        [HttpGet("{name}")]     
+        [HttpGet("{name}")]
+       
         public async Task<ActionResult> GetRole(string name)
         {
             var role = await _roleManager.FindByNameAsync(name);
@@ -55,6 +61,8 @@ namespace Unidemo.Controllers
         // POST: api/Roles
         ///<summary>Creates a new role.</summary>
         [HttpPost]
+        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "Developer")]
         public async Task<ActionResult<ResponseDto>> CreateRole([FromBody] RoleDto roleDto)
         {
             var roleExists = await _roleManager.RoleExistsAsync(roleDto.Name);
@@ -95,6 +103,8 @@ namespace Unidemo.Controllers
         // PUT: api/Roles/name
         ///<summary>Edit role</summary>
         [HttpPut("{id}")]
+        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "Developer")]
         public async Task<IActionResult> EditRole(string id, [Bind("Id, Name")] EditRoleDto identityRole)
         {
             if (id != identityRole.Id)
@@ -130,6 +140,8 @@ namespace Unidemo.Controllers
         // DELETE: api/Roles/name
         ///<summary>Deletes role by name</summary>
         [HttpDelete("{name}")]
+        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "Developer")]
         public async Task<ActionResult<ResponseDto>> DeleteRole(string name)
         {
             var role = await _roleManager.FindByNameAsync(name);

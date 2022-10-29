@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Unidemo.Data;
 
@@ -11,13 +12,14 @@ using Unidemo.Data;
 namespace Unidemo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221014155630_ManyToManyStudentCourse")]
+    partial class ManyToManyStudentCourse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.10")
+                .HasAnnotation("ProductVersion", "6.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -281,34 +283,6 @@ namespace Unidemo.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("Unidemo.Models.Grade", b =>
-                {
-                    b.Property<Guid>("GradeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CourseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("GradeValue")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("StudentName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TeacherName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("GradeId");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("Grades");
-                });
-
             modelBuilder.Entity("Unidemo.Models.StudentCourse", b =>
                 {
                     b.Property<string>("Id")
@@ -384,15 +358,6 @@ namespace Unidemo.Migrations
                     b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("Unidemo.Models.Grade", b =>
-                {
-                    b.HasOne("Unidemo.Models.Course", "Course")
-                        .WithMany("Studentsgrades")
-                        .HasForeignKey("CourseId");
-
-                    b.Navigation("Course");
-                });
-
             modelBuilder.Entity("Unidemo.Models.StudentCourse", b =>
                 {
                     b.HasOne("Unidemo.Models.Course", "Course")
@@ -420,8 +385,6 @@ namespace Unidemo.Migrations
             modelBuilder.Entity("Unidemo.Models.Course", b =>
                 {
                     b.Navigation("StudentCourses");
-
-                    b.Navigation("Studentsgrades");
                 });
 
             modelBuilder.Entity("Unidemo.Models.Department", b =>

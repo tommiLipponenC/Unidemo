@@ -5,6 +5,8 @@ using Unidemo.DTO;
 using Unidemo.DTOauthentication;
 using Unidemo.DTOcourse;
 using Unidemo.DTOdepartment;
+using Unidemo.DTOgrade;
+using Unidemo.DTOstudentcourse;
 using Unidemo.DTOteacher;
 using Unidemo.DTOuser;
 using Unidemo.Models;
@@ -26,6 +28,9 @@ namespace Unidemo.DTOmapper
             CreateMap<ApplicationUser, UserDto>().ReverseMap();
             CreateMap<ApplicationUser, UsersDepartmentDto>().ReverseMap();
             CreateMap<ApplicationUser, TeacherDetailsDto>().ReverseMap();
+            CreateMap<ApplicationUser, StudentDetailDto>().ReverseMap();
+            CreateMap<Grade, CreateGradeDto>().ReverseMap();
+            CreateMap<Grade, EditGradeDto>().ReverseMap();
         }
     }
 }

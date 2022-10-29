@@ -13,6 +13,8 @@ namespace Unidemo.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Course>()
                 .HasMany(c => c.AppUsers)
                 .WithMany(c => c.Courses)
@@ -24,10 +26,16 @@ namespace Unidemo.Data
                     c => c
                         .HasOne(uc => uc.Course)
                         .WithMany(c => c.StudentCourses)
-                        .HasForeignKey(uc => uc.CourseId));
+                        .HasForeignKey(uc => uc.CourseId),
+                    c =>
+                    {
+                        c.HasKey(s => new {s.Id, s.CourseId});
+                    });
+
         }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<StudentCourse> StudentCourses { get; set;}
+        public DbSet<Grade> Grades { get; set; }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using Unidemo.Data;
 using Unidemo.DTOcourse;
 using Unidemo.DTOuser;
@@ -14,6 +16,8 @@ namespace Unidemo.Controllers
     [ApiController]
     [Produces("application/json")]
     [Consumes("application/json")]
+    [Authorize(Roles = "Admin, SuperAdmin")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public class UsersRolesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -28,9 +32,9 @@ namespace Unidemo.Controllers
             _mapper = mapper;
             _roleManager = roleManager;
         }
-   
+
         // GET: api/Users
-        ///<summary>Retrieves a list of users in a specific Role.</summary>
+        ///<summary>Retrieves a list of users in a specific Role(Required Role = Admin or SuperAdmin)</summary>
         [HttpGet("role-id")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -63,7 +67,7 @@ namespace Unidemo.Controllers
             }           
         }
 
-        ///<summary>Retrieves a list of users Roles.</summary>
+        ///<summary>Retrieves a list of users Roles(Required Role = Admin or SuperAdmin)</summary>
         [HttpGet("user-id")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -96,11 +100,12 @@ namespace Unidemo.Controllers
             }
         }
 
-        ///<summary>Grants specified Role to User by RoleId and UserId</summary>
+        ///<summary>Grants specified Role to User by RoleId and UserId(Required Role = Admin or SuperAdmin)</summary>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+     
         public async Task<IActionResult> AddUserToRole( string userId, string roleId)
         {
             try

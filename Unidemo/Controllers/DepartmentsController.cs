@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,8 @@ namespace Unidemo.Controllers
     [ApiController]
     [Produces("application/json")]
     [Consumes("application/json")]
+    [Authorize(Roles = "Admin, SuperAdmin")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public class DepartmentsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -31,8 +34,10 @@ namespace Unidemo.Controllers
       //  GET: api/Departments
        ///<summary>Retrieves a list of all departments.</summary>
        [HttpGet]
-       [ProducesResponseType(StatusCodes.Status200OK)]
+       
+        [ProducesResponseType(StatusCodes.Status200OK)]
        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetDepartments()
         {
             try
@@ -53,6 +58,7 @@ namespace Unidemo.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<Department>> GetDepartment(Guid id)
         {
             var department = await _context.Departments.FindAsync(id);
@@ -79,6 +85,7 @@ namespace Unidemo.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> EditDepartment(Guid id, [FromBody] EditDepartmentDto editDepartmentDto)
         {
             if (!ModelState.IsValid || id == Guid.Empty)
@@ -110,7 +117,7 @@ namespace Unidemo.Controllers
                         {
                             if (entry.Entity is Department)
                             {
-                                var proposedValues = entry.CurrentValues;
+                                var proposedValues = entry.CurrentValues;                  // Valitse alkuperäiset vai uudet arvot. 
                                 var databaseValues = entry.GetDatabaseValues();
 
                                 foreach (var property in proposedValues.Properties)
@@ -118,7 +125,7 @@ namespace Unidemo.Controllers
                                     var proposedValue = proposedValues[property];
                                     var databaseValue = databaseValues[property];
                                 }
-                                entry.OriginalValues.SetValues(databaseValues);
+                                entry.OriginalValues.SetValues(databaseValues);         // Aseta alkuperäiset arvot.
                             }
                             else
                             {
@@ -142,6 +149,7 @@ namespace Unidemo.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult> PostDepartment([FromBody] CreateDepartmentDto createDepartmentDto)
         {
             if (!ModelState.IsValid)
@@ -174,6 +182,7 @@ namespace Unidemo.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> DeleteDepartment(Guid id)
         {
             if (id == Guid.Empty)

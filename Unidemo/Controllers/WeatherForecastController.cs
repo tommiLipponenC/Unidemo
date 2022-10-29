@@ -5,8 +5,9 @@ using System.Data;
 namespace Unidemo.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    [Authorize(Roles = "RegisteredUser")]
+    [Route("weatherforecast")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]

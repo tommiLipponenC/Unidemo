@@ -1,18 +1,23 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using Unidemo.Data;
 using Unidemo.DTOdepartment;
 using Unidemo.DTOuser;
 
 namespace Unidemo.Controllers
 {
+  
     [Route("api/[controller]")]
     [ApiController]
     [Produces("application/json")]
     [Consumes("application/json")]
+    [Authorize(Roles = "Admin, SuperAdmin")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public class UsersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -29,7 +34,7 @@ namespace Unidemo.Controllers
         }
 
         // GET: api/Users
-        ///<summary>Retrieves a list of all Users.</summary>
+        ///<summary>Retrieves a list of all Users(Required Role = Admin or SuperAdmin)</summary>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -47,7 +52,7 @@ namespace Unidemo.Controllers
             }
         }
 
-        ///<summary>Signs a department to user.</summary>
+        ///<summary>Signs a department to user(Required Role = Admin or SuperAdmin)</summary>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -82,7 +87,7 @@ namespace Unidemo.Controllers
         }
 
         // DELETE: api/Courses/5
-        ///<summary>Deletes User by id</summary>
+        ///<summary>Deletes User by id(Required Role = Admin or SuperAdmin)</summary>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
