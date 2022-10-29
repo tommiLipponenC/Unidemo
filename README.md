@@ -7,5 +7,9 @@ käyttäjien toiminnot on kuitenkin sijoitettu omiin, roolien mukaan nimettyihin
 # API Dokumentointi
 Kattava Swagger, Swashbuckle OpenApi dokumentaatio.
 # Tekniikkaa
--MSSQL tietokanta
--Entity Framework Core 6 ORM
+-MSSQL tietokanta<br/>
+-Entity Framework Core 6 ORM<br/>
+-ASP NET Core 6<br/>
+-ASP NET Core.Identity.EntityFrameworkCore<br/>
+-ASP NET Core.Authentication.JwtBearer<br/>
+-AutoMapper<br/>
