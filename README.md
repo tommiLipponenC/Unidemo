@@ -13,3 +13,8 @@ Kattava Swagger, Swashbuckle OpenApi dokumentaatio.
 -ASP NET Core.Identity.EntityFrameworkCore<br/>
 -ASP NET Core.Authentication.JwtBearer<br/>
 -AutoMapper<br/>
+# Selviä puutteita
+Koska tämä on pääasiassa OAuth2/JWT/Role/Automapper kokeilu;<br/>
+-Data layer: iä ei ole eristetty repository pattern:illä yksikkötestausta varten.<br/>
+-Controllerit ovat lihavia.<br/>
+-DTO: t eivät ole loogisessa järjestyksessä
